@@ -1,44 +1,42 @@
 #!/usr/bin/env python3
 # bot.py
-# A Discord bot for reminders in WolverineSoft Studio
+# Script that sends the actual reminder
 # Created by Nicolas Williams, 10/30/2020
 
 # Webpage with instructions on Discord bots
 # https://realpython.com/how-to-make-a-discord-bot-python/
 
 import os
+import json
 
 import discord
+from discord.ext import commands
 from dotenv import load_dotenv
 
-from discord.ext import commands
-
+# Connect to client
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 SERVER = os.getenv('DISCORD_SERVER')
-
 client = discord.Client()
-
-# An event is something that happens on Discord that you can use to trigger a
-# reaction in your code. Your code will listen for and then respond to events.
-# TODO: Allow reminders to be created based on createReminder command
-#   - define message, channel, mention targets, reactions, frequency & time
-
-# TODO: Send a message in the discord with the reminder
-
-# TODO: React to the reminder with relevant reactions
 
 @client.event
 async def on_ready():
-    for guild in client.guilds:
-        if guild.name == SERVER:
-            break
+    print("on_ready()")
+    guild = discord.utils.get(client.guilds, name=SERVER)
+    reminders = acquire_due_reminders()
+    for r in reminders:
+        channel = discord.utils.get(guild.text_channels, name=r['channel'])
+        await channel.send(r['message'])
 
-    print(
-            f"{client.user} is connected to the following server:\n"
-            f"{guild.name} (id: {guild.id})"
-            )
-    channel = discord.utils.get(guild.text_channels, name="general")
-    await channel.send('This is a test message')
+
+    # await channel.send(MESSAGE)
+    await client.close()
+
+
+def acquire_due_reminders():
+    with open('due_reminders.json') as json_file:
+        data = json.load(json_file)
+    return data
+
 
 client.run(TOKEN)

@@ -1,0 +1,10 @@
+[
+	{
+		"channel": "general",
+		"message": "studio meeting soon!"
+	},
+	{
+		"channel": "leads",
+		"message": "@everyone reminder we have a leads meeting!"
+	}
+]
