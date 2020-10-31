@@ -1,0 +1,5 @@
+{
+	"server": "[TEST] Server",
+	"channel": "leads",
+	"message": "@leads\nReminder we have a leads meeting **Tomorrow @ 11am ET!**"
+}
