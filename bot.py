@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 # bot.py
-# Sends Discord reminders
-# Created by Nicolas Williams, 10/30/2020
+# Responsible for interacting with users to create, edit, and remove reminders
+# Created by Nicolas Williams, 10/31/2020
+
+# TODO:
+# TODO: Restrict reminder creation to leads
+# TODO: Handle messages & channels that break json formatting (quotes, slashes)
+# TODO: Create & write to err / logfile (for bot & message_send bot)
+# Create log_print() function
 
 import os
 import json
 import sys
 
+from crontab import CronTab
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -14,37 +21,39 @@ from dotenv import load_dotenv
 # Connect to Discord
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+# Virtual environment Python executable
+PYTHON_EXEC = os.getenv("PYTHON_EXEC_PATH")
+# Directory that holds reminders messages
+REMINDERS_DIR = os.getenv("REMINDERS_DIR")
+# Location of bot.py script (this script)
+BOT_PATH = os.getenv("BOT_SCRIPT_PATH")
 bot = commands.Bot(command_prefix="!")
 
 
 @bot.event
 async def on_ready():
     print(f"{bot.user.name} successfully connected to Discord.")
-    if len(sys.argv) == 1:  # No parameters were given
-        print("No parameters given to script, exiting...")
-        await bot.close()
-        return
-
-    reminder = acquire_reminder()
-    await send_reminder(reminder)
-
-    # await channel.send(MESSAGE)
-    await bot.close()
 
 
-# Returns reminders stored in json file
-# FIXME: Consider using fcntl.flock() to avoid race conditions & file corruption
-def acquire_reminder():
-    with open(f"reminders/{sys.argv[1]}") as json_file:
-        reminder = json.load(json_file)
-    return reminder
+# TODO: Implement this command
+# @bot.command
+# def create_reminder
 
+# TODO: Implement this command
+# @bot.command
+# def delete_reminder
 
-# Sends given reminder message to appropriate channel
-async def send_reminder(reminder):
-    server = discord.utils.get(bot.guilds, name=reminder["server"])
-    channel = discord.utils.get(server.text_channels, name=reminder["channel"])
-    await channel.send(reminder["message"])
+# TODO: Implement this command
+# @bot.command
+# def list_reminders
 
+# TODO: Implement this function
+# def construct_reminder_obj(channel, message, cron_time):
+
+# TODO: Implement this function
+# def write_json(reminder):
+
+# TODO: Implement this function
+# def create_cron_job(reminder)
 
 bot.run(TOKEN)
