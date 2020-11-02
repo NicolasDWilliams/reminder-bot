@@ -25,16 +25,21 @@ async def on_ready():
     if len(sys.argv) == 1:  # No parameters were given
         print_error("No parameters given to script, exiting...")
         # TODO: Print usage
-        await bot.close()
+        close_bot()
         return
 
     REMINDER_FILE = sys.argv[1]
 
-    reminder = acquire_reminder(REMINDER_FILE)
+    try:
+        reminder = acquire_reminder(REMINDER_FILE)
 
-    await send_reminder(reminder)
+        await send_reminder(reminder)
+    except:
+        print_error(f"An error occured, closing program.")
+        await close_bot()
+        return
 
-    await bot.close()
+    await close_bot()
 
 
 # @bot.event
@@ -50,9 +55,13 @@ async def on_ready():
 # - doesn't exist
 # - can't be parsed
 def acquire_reminder(reminder_file: str):
-    with open(reminder_file) as json_file:
-        # TODO: Error checking - can't be parsed
-        reminder = json.load(json_file)
+    try:
+        with open(reminder_file) as json_file:
+            # TODO: Error checking - can't be parsed
+            reminder = json.load(json_file)
+    except IOError as e:
+        print_error(f"ERROR: File {reminder_file} doesn't exist.")
+        raise e
 
     # TODO: Validation of json file
     return reminder
@@ -70,8 +79,14 @@ async def send_reminder(reminder):
 
 
 def print_error(message):
+    print(message)
     with open(ERR_LOG_FILE, "a") as f:
         f.write(message)
+
+
+async def close_bot():
+    print_error("Closing bot...")
+    await bot.close()
 
 
 bot.run(TOKEN)
