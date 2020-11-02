@@ -1,3 +1,11 @@
+# Repository specific
+# Don't store reminders in source control
+reminders/
+
+
+
+
+
 # Vim
 *.swp
 # Byte-compiled / optimized / DLL files
