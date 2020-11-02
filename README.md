@@ -8,7 +8,10 @@ A Discord bot that handles reminders for WolverineSoft Studio game projects!
 ## Coming Soon
 * Create reminders through Discord bot commands
 * List & delete reminders
+* Support for role @mentions
 
 
 ## Long-term Plans
 * Multi-server support
+* Support for user @mentions
+* Support for bot-added reactions
