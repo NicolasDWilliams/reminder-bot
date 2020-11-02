@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# bot.py
-# Sends Discord reminders
+# message_bot.py
+# Sends Discord reminders based on reminder json files in reminders directory
 # Created by Nicolas Williams, 10/30/2020
 
 import os
@@ -27,7 +27,6 @@ async def on_ready():
     reminder = acquire_reminder()
     await send_reminder(reminder)
 
-    # await channel.send(MESSAGE)
     await bot.close()
 
 
