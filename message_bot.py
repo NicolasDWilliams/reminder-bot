@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # message_bot.py
 # Sends Discord reminders based on reminder json files in reminders directory
+# Argument after script name should be the full path of the json file that
+#   contains the reminder information
 # Created by Nicolas Williams, 10/30/2020
 
 import os
@@ -14,6 +16,7 @@ from dotenv import load_dotenv
 # Connect to Discord
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+REMINDER_FILE = sys.argv[1]
 bot = commands.Bot(command_prefix="!")
 
 
@@ -24,16 +27,15 @@ async def on_ready():
         await bot.close()
         return
 
-    reminder = acquire_reminder()
+    reminder = acquire_reminder(REMINDER_FILE)
     await send_reminder(reminder)
 
     await bot.close()
 
 
-# Returns reminders stored in json file
+# Returns reminder loaded from given reminder json file
 # FIXME: Consider using fcntl.flock() to avoid race conditions & file corruption
-def acquire_reminder():
-    reminder_file = sys.argv[1]
+def acquire_reminder(reminder_file: str):
     with open(reminder_file) as json_file:
         reminder = json.load(json_file)
     return reminder
