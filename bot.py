@@ -3,7 +3,6 @@
 # Responsible for interacting with users to create, edit, and remove reminders
 # Created by Nicolas Williams, 10/31/2020
 
-# TODO:
 # TODO: Restrict reminder creation to leads
 # TODO: Handle messages & channels that break json formatting (quotes, slashes)
 # TODO: Create & write to err / logfile (for bot & message_send bot)
@@ -44,11 +43,20 @@ async def on_ready():
 # - channel exists
 # - compare channel text vs ID (if they use #)
 
+# TODO: Show usage of function or else nobody can use it
+
 # TODO: Handle Errors
 # - wrong # params
+# - nickname already taken
+# - resolve nickname spaces
 @bot.command(name="create_reminder", help="Creates a reminder")
 async def create_reminder(
-    ctx, given_message: str, given_channel: str, given_hour: int, given_dow: str
+    ctx,
+    reminder_nickname: str,
+    given_message: str,
+    given_channel: str,
+    given_hour: str,
+    given_dow: str,
 ):
     print(
         f"Command received: $create_reminder \n\tmsg={given_message}\n\tchannel={given_channel}\n\thour={given_hour}\n\tdow={given_dow}"
@@ -56,9 +64,9 @@ async def create_reminder(
 
     # FIXME: Validate parameters
     # test variables for after validation
+    server = ctx.guild.name
     channel = given_channel
     message = given_message
-    server = ctx.guild.name
     hour = given_hour
     minute = 0
     dom = "*"
@@ -73,11 +81,12 @@ async def create_reminder(
         "channel": channel,
         "message": message,
     }
-    with open("test_reminder.json", "w") as f:
+
+    json_file_path = f"{REMINDERS_DIR}/{reminder_nickname}.json"
+    with open(json_file_path, "w") as f:
         json.dump(json_obj, f, indent=4)
 
     # TODO: Save json file
-    json_file_path = "test/file/path/reminder.json"
 
     # TODO: Create cronjob time string
     seperator = " "
