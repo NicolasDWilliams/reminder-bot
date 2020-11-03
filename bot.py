@@ -12,6 +12,7 @@
 import os
 import json
 import sys
+import signal
 
 from crontab import CronTab
 import discord
@@ -35,9 +36,10 @@ async def on_ready():
     print(f"{bot.user.name} successfully connected to Discord.")
 
 
-# TODO: Implement this command
-# @bot.command
-# def create_reminder
+@bot.command(name="create_reminder")
+async def create_reminder(ctx):
+    await ctx.send("I heard the 'create_reminder' command")
+
 
 # TODO: Implement this command
 # @bot.command
@@ -55,5 +57,11 @@ async def on_ready():
 
 # TODO: Implement this function
 # def create_cron_job(reminder)
+
+# Close the Discord bot
+async def close_bot(disc_bot):
+    print("Closing Discord bot...")
+    await disc_bot.close()
+
 
 bot.run(TOKEN)
