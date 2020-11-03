@@ -1,6 +1,6 @@
 # Repository specific
 # Don't store reminders in source control
-./reminders/
+/reminders/
 
 
 
