@@ -1,0 +1,5 @@
+{
+	"server": "[TEST] Server",
+	"channel": "nonexistent-channel",
+	"message": "Hello, World!"
+}
