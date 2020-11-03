@@ -11,9 +11,9 @@ python "$MSG_BOT"
 python "$MSG_BOT" tests/reminders/nonexistent_file.json
 
 # Reminder file can't be parsed
-# python "$MSG_BOT" tests/reminders/parse_failure_sample.json
+python "$MSG_BOT" reminders/parse_failure_sample.json
 
-# # Send message in read-only channel
+# Send message in read-only channel
 # python "$MSG_BOT" tests/reminders/read_only_sample.json
 
 # # Send message in restricted channel
