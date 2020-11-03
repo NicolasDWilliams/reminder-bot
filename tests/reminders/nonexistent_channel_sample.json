@@ -1,5 +1,5 @@
 {
 	"server": "[TEST] Server",
-	"channel": "general",
+	"channel": "nonexistent-channel",
 	"message": "Hello, World!"
 }
