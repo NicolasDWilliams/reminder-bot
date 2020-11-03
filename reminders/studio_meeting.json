@@ -1,6 +1,5 @@
 {
-	"server": "[TEST] Server",
+	"server": "WSS Fall 2020",
 	"channel": "announcements",
-	"message": "@everyone\nReminder that we have a studio meeting **Tomorrow @ 3pm ET**!"
+	"message": "Hey @everyone!\nReminder that we have a studio meeting **Tomorrow @ 3pm ET!\n:thumbsup: if you'll be there! Otherwise, :thumbsdown: and make sure to DM your department lead beforehand."
 }
-
