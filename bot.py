@@ -42,39 +42,49 @@ async def on_ready():
 # - Hour not negative
 # - dow is valid
 # - channel exists
+# - compare channel text vs ID (if they use #)
 
 # TODO: Handle Errors
 # - wrong # params
 @bot.command(name="create_reminder", help="Creates a reminder")
-async def create_reminder(ctx, msg: str, channel: str, hour: int, dow: str):
+async def create_reminder(
+    ctx, given_message: str, given_channel: str, given_hour: int, given_dow: str
+):
     print(
-        f"Command received: $create_reminder \n\tmsg={msg}\n\tchannel={channel}\n\thour={hour}\n\tdow={dow}"
+        f"Command received: $create_reminder \n\tmsg={given_message}\n\tchannel={given_channel}\n\thour={given_hour}\n\tdow={given_dow}"
     )
 
     # FIXME: Validate parameters
+    # test variables for after validation
+    channel = given_channel
+    message = given_message
+    server = ctx.guild.name
+    hour = given_hour
+    minute = 0
+    dom = "*"
+    month = "*"
+    dow = given_dow
 
     # TODO: Validate & affirm action with user
 
     # TODO: Construct json file
+    json_obj = {
+        "server": server,
+        "channel": channel,
+        "message": message,
+    }
+    with open("test_reminder.json", "w") as f:
+        json.dump(json_obj, f, indent=4)
 
     # TODO: Save json file
     json_file_path = "test/file/path/reminder.json"
 
     # TODO: Create cronjob time string
-    cron_minute = "0"  # 0-59
-    cron_hour = str(hour)  # 0-23
-    cron_dom = "*"  # 1-31
-    cron_month = "*"  # 1-12
-    cron_dow = dow  # 0-7 (0 & 7 both represent Sunday)
     seperator = " "
-
-    # Create cronjob command
     cron_command = seperator.join([PYTHON_EXEC, BOT_PATH, json_file_path])
+    cron_entry = create_cron_entry(minute, hour, dom, month, dow, cron_command)
 
-    cron_str = seperator.join(
-        [cron_minute, cron_hour, cron_dom, cron_month, cron_dow, cron_command]
-    )
-    print(f"Resulting cron string:\n\t{cron_str}")
+    # Write the cron job
 
 
 # TODO: Implement this command
@@ -109,6 +119,27 @@ async def delete_reminder(ctx, reminder_name):
 async def close_bot(disc_bot):
     print("Closing Discord bot...")
     await disc_bot.close()
+
+
+# Validates components of a potential cron entry and returns the entry as a
+# string
+# TODO: Make sure dow is capitalized or a number
+def create_cron_entry(minute, hour, dom, month, dow, command):
+    seperator = " "
+    cron_minute = str(minute)  # 0-59
+    cron_hour = str(hour)  # 0-23
+    cron_dom = str(dom)  # 1-31
+    cron_month = str(month)  # 1-12
+    cron_dow = str(dow)  # 0-7 (0 & 7 both represent Sunday)
+
+    # Create cronjob command
+    cron_command = command
+
+    cron_str = seperator.join(
+        [cron_minute, cron_hour, cron_dom, cron_month, cron_dow, cron_command]
+    )
+    print(f"Resulting cron string:\n\t{cron_str}")
+    return cron_str
 
 
 bot.run(TOKEN)
